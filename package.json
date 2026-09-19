@@ -1,0 +1,26 @@
+{
+  "name": "veridian-fintech",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Veridian - customer-facing fintech web app (React + TypeScript) with a mock NestJS REST API",
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run start:dev --workspace api",
+    "dev:web": "npm run dev --workspace web",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e --workspace web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
