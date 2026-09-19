@@ -1,9 +1,8 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import { Toaster } from '@/components/ui/Toaster';
-import { useSessionBootstrap } from '@/hooks/useSessionBootstrap';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppShell } from '@/layouts/AppShell';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { RedirectIfAuthenticated, RequireAuth } from './guards';
+import { Root } from './Root';
 import { RouteErrorPage } from './RouteErrorPage';
 
 /**
@@ -15,16 +14,6 @@ const page = (loader: () => Promise<{ default: React.ComponentType }>) => async 
   const module = await loader();
   return { Component: module.default };
 };
-
-function Root() {
-  useSessionBootstrap();
-  return (
-    <>
-      <Outlet />
-      <Toaster />
-    </>
-  );
-}
 
 export const routes = [
   {

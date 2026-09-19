@@ -26,6 +26,9 @@ export function Modal({ open, title, description, onClose, children, footer }: M
   }, [open]);
 
   return (
+    // <dialog> is interactive and handles Escape natively; the click handler
+    // only adds "click the backdrop to dismiss", so no key handler is needed.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <dialog
       ref={ref}
       className={styles.dialog}
