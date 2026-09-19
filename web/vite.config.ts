@@ -40,9 +40,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Long-lived vendor chunks cache independently of app code.
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
-          query: ['@tanstack/react-query'],
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          // Vite normalises ids to forward slashes on every platform.
+          if (/\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(id)) {
+            return 'react';
+          }
+          if (id.includes('@tanstack')) return 'query';
+          return 'vendor';
         },
       },
     },
