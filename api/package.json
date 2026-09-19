@@ -9,8 +9,7 @@
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "jest",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test": "jest --config ./test/jest-e2e.json",
     "start:e2e": "cross-env MOCK_LATENCY_MS=0 API_PORT=3100 LOGIN_RATE_LIMIT=10000 nest start"
   },
   "dependencies": {
@@ -44,22 +43,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2",
     "cross-env": "^7.0.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }
