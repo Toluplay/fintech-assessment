@@ -12,7 +12,8 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log'],
   });
 
-  const port = Number(process.env.PORT ?? 3000);
+  // API_PORT wins over the generic PORT so the API never collides with the web dev server.
+  const port = Number(process.env.API_PORT ?? process.env.PORT ?? 3000);
   const corsOrigins = (process.env.CORS_ORIGINS ?? 'http://localhost:5173')
     .split(',')
     .map((origin) => origin.trim())

@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
-    "dev:api": "npm run start:dev --workspace api",
+    "dev:api": "cross-env API_PORT=3000 npm run start:dev --workspace api",
     "dev:web": "npm run dev --workspace web",
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces --if-present",
@@ -18,7 +18,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3"
   },
   "engines": {
     "node": ">=20"
