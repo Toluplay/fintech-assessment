@@ -1,0 +1,90 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-700);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease;
+}
+
+.control:focus-within {
+  border-color: var(--brand-500);
+  box-shadow: var(--focus-ring);
+}
+
+.invalid {
+  border-color: var(--danger-600);
+}
+
+.invalid:focus-within {
+  box-shadow: 0 0 0 3px rgb(180 35 24 / 0.2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.875rem;
+  padding: 0 var(--space-4);
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  font-size: var(--text-md);
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.input::placeholder {
+  color: var(--ink-400);
+}
+
+.trailing {
+  display: flex;
+  align-items: center;
+  padding-right: var(--space-2);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-sm);
+  color: var(--ink-500);
+}
+
+.toggle:hover {
+  color: var(--ink-900);
+  background: var(--surface-muted);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--danger-600);
+}

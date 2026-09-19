@@ -1,0 +1,44 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.wordmark {
+  font-size: 1.25rem;
+}
+
+.sm .wordmark {
+  font-size: 1.05rem;
+}
+
+.lg .wordmark {
+  font-size: 1.5rem;
+}
+
+.dark {
+  color: var(--brand-900);
+}
+
+.dark .tile {
+  fill: var(--brand-900);
+}
+
+.dark .mark {
+  fill: var(--brand-glow);
+}
+
+.light {
+  color: var(--white);
+}
+
+.light .tile {
+  fill: rgb(255 255 255 / 0.12);
+}
+
+.light .mark {
+  fill: var(--brand-glow);
+}

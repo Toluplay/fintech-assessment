@@ -1,0 +1,117 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100dvh;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(22rem, 44%) 1fr;
+  }
+}
+
+.panel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-10);
+    padding: var(--space-12) var(--space-10);
+    background:
+      radial-gradient(circle at 20% 15%, rgb(74 222 156 / 0.25), transparent 40%),
+      radial-gradient(circle at 90% 90%, rgb(18 128 92 / 0.55), transparent 50%),
+      var(--brand-900);
+    color: var(--white);
+  }
+}
+
+.panelBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.panelTitle {
+  font-size: var(--text-3xl);
+  color: var(--white);
+  max-width: 16ch;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.point {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.pointIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+  background: rgb(255 255 255 / 0.1);
+  color: var(--brand-glow);
+}
+
+.pointTitle {
+  font-weight: 600;
+}
+
+.pointText {
+  font-size: var(--text-sm);
+  color: rgb(255 255 255 / 0.7);
+}
+
+.legal {
+  font-size: var(--text-xs);
+  color: rgb(255 255 255 / 0.55);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-4);
+}
+
+.main:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: var(--space-12) var(--space-8);
+  }
+}
+
+.mobileLogo {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .mobileLogo {
+    display: none;
+  }
+}
+
+.fallback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(100%, 26rem);
+}

@@ -1,0 +1,91 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: min(100%, 26rem);
+}
+
+@media (min-width: 480px) {
+  .card {
+    padding: var(--space-8);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-2xl);
+}
+
+.subtitle {
+  color: var(--text-muted);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.link {
+  font-weight: 600;
+}
+
+.register {
+  color: var(--text-muted);
+}
+
+.secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.demo {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-4);
+}
+
+.demo summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink-500);
+}
+
+.demo dl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+}
+
+.demo dl div {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.demo dt {
+  width: 4.5rem;
+  font-weight: 600;
+}
+
+.demo dd {
+  font-family: var(--font-mono);
+  color: var(--ink-700);
+  user-select: all;
+}
