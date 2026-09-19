@@ -45,7 +45,7 @@ const ProductCard = memo(function ProductCard({
           <ProductIcon icon={icon} tone={tone} />
           {highlight ? <span className={styles.highlight}>{highlight}</span> : null}
         </div>
-        <h3 className={styles.name}>{name}</h3>
+        <h2 className={styles.name}>{name}</h2>
         <p className={styles.description}>{description}</p>
         <dl className={styles.stats}>
           {stats.map((stat) => (
