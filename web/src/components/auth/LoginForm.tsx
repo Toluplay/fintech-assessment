@@ -1,4 +1,5 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
+import { flushSync } from 'react-dom';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { PasswordField, TextField } from '@/components/ui/TextField';
@@ -67,15 +68,21 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     try {
       await onSubmit({ identifier: values.identifier.trim(), password: values.password });
     } catch (error) {
-      setFormError(getUserMessage(error));
-      // Do not keep the password around after a failed attempt.
+      // Re-enable the fields synchronously so focus can land on the password.
+      flushSync(() => {
+        setSubmitting(false);
+        setFormError(getUserMessage(error));
+        // Do not keep the password around after a failed attempt.
+        if (isApiError(error) && error.kind === 'unauthorized') {
+          setValues((prev) => ({ ...prev, password: '' }));
+        }
+      });
       if (isApiError(error) && error.kind === 'unauthorized') {
-        setValues((prev) => ({ ...prev, password: '' }));
         passwordRef.current?.focus();
       }
-    } finally {
-      setSubmitting(false);
+      return;
     }
+    setSubmitting(false);
   }
 
   return (
