@@ -9,6 +9,8 @@ import type { LoginResponse } from './auth.types';
 import { LoginDto } from './dto/login.dto';
 
 export const REFRESH_COOKIE = 'vf_refresh';
+/** Login attempts per minute per IP. Raised only for automated test runs. */
+const LOGIN_RATE_LIMIT = Number(process.env.LOGIN_RATE_LIMIT ?? 5);
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +25,7 @@ export class AuthController {
    * can never read - so an XSS bug cannot exfiltrate a durable credential.
    */
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60_000 } }) // brute-force protection
+  @Throttle({ default: { limit: LOGIN_RATE_LIMIT, ttl: 60_000 } }) // brute-force protection
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
