@@ -4,16 +4,20 @@
 
 @media (min-width: 1024px) {
   .sidebar {
+    display: block;
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--brand-900);
+    color: var(--white);
+  }
+
+  .inner {
     position: sticky;
     top: 0;
     display: flex;
     flex-direction: column;
-    width: var(--sidebar-width);
     height: 100dvh;
     padding: var(--space-6) var(--space-4);
-    background: var(--brand-900);
-    color: var(--white);
-    flex-shrink: 0;
   }
 }
 

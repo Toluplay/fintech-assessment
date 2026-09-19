@@ -4,7 +4,8 @@ import { Icon } from './Icon';
 import styles from './PageHeader.module.css';
 
 interface PageHeaderProps {
-  title: ReactNode;
+  /** Omit on pages whose main content renders its own <h1> (e.g. product detail). */
+  title?: ReactNode;
   description?: ReactNode;
   eyebrow?: string;
   backTo?: { to: string; label: string };
@@ -22,7 +23,7 @@ export function PageHeader({ title, description, eyebrow, backTo, actions }: Pag
           </Link>
         ) : null}
         {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-        <h1 className={styles.title}>{title}</h1>
+        {title ? <h1 className={styles.title}>{title}</h1> : null}
         {description ? <p className={styles.description}>{description}</p> : null}
       </div>
       {actions ? <div className={styles.actions}>{actions}</div> : null}

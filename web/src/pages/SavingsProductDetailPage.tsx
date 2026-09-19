@@ -37,7 +37,7 @@ export default function SavingsProductDetailPage() {
   if (query.isPending && !product) {
     return (
       <div className="page-enter">
-        <PageHeader backTo={back} title={<span className="visually-hidden">Loading</span>} />
+        <PageHeader backTo={back} />
         <DetailSkeleton />
       </div>
     );
@@ -72,7 +72,7 @@ export default function SavingsProductDetailPage() {
 
   return (
     <div className="page-enter">
-      <PageHeader backTo={back} title={<span className="visually-hidden">{product.name}</span>} />
+      <PageHeader backTo={back} />
       <DetailLayout
         main={
           <>
