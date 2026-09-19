@@ -1,0 +1,44 @@
+.shell {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  /* Leave room for the fixed bottom tab bar on mobile. */
+  padding-bottom: calc(var(--bottomnav-height) + env(safe-area-inset-bottom));
+}
+
+.main:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding-bottom: 0;
+  }
+}
+
+.content {
+  padding: var(--space-5) var(--space-4) var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: var(--space-8) var(--space-6) var(--space-12);
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    padding: var(--space-10) var(--space-10) var(--space-16);
+  }
+}
