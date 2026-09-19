@@ -1,0 +1,27 @@
+.badge {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+}
+
+.md {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-lg);
+}
+
+.savings {
+  background: var(--brand-50);
+  color: var(--brand-600);
+}
+
+.loans {
+  background: var(--accent-100);
+  color: var(--accent-500);
+}
