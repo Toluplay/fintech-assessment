@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "screenshots": "playwright test --project=screenshots"
+    "screenshots": "playwright test --project=screenshots",
+    "perf": "node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.85.5",
@@ -39,7 +40,9 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "happy-dom": "^20.14.5",
+    "lighthouse": "^13.5.0",
     "msw": "^2.11.1",
+    "puppeteer-core": "^25.11.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0",
     "vite": "^7.1.4",

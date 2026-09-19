@@ -26,3 +26,7 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# lighthouse chrome profiles
+web/node_modules/.cache/
+*.tsbuildinfo
