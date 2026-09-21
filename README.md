@@ -78,6 +78,8 @@ npm run dev
 
 Open http://localhost:5173 and sign in with the demo credentials.
 
+**No local setup? Run it inside GitHub.** On the repository page click **Code → Codespaces → Create codespace on main**. The dev container installs dependencies, starts both servers and opens the forwarded web app URL in a new tab (allow ~2 minutes on first boot). Sign in with the demo credentials.
+
 Other commands (run from the repo root):
 
 | Command | What it does |

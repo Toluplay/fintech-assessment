@@ -17,6 +17,10 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // In GitHub Codespaces the app is reached through a forwarded
+    // *.app.github.dev URL, so bind to all interfaces and allow that host.
+    host: process.env.CODESPACES ? true : 'localhost',
+    allowedHosts: process.env.CODESPACES ? ['.app.github.dev'] : undefined,
     proxy: {
       '/api': {
         target: API_TARGET,
