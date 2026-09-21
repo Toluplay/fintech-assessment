@@ -2,7 +2,10 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
+import type { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
+import { existsSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
@@ -18,6 +21,12 @@ async function bootstrap() {
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+
+  // Single-service deployment: serve the built SPA from this process under
+  // the same origin, with the API mounted at /api. Cookies stay first-party.
+  const webDist = resolve(process.env.WEB_DIST ?? join(__dirname, '../../web/dist'));
+  const serveWeb = process.env.SERVE_WEB === 'true' && existsSync(webDist);
+  if (serveWeb) app.setGlobalPrefix('api');
 
   // Security headers (CSP, HSTS, X-Content-Type-Options, ...).
   app.use(helmet());
@@ -44,9 +53,39 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  if (serveWeb) {
+    // Hashed build assets are immutable; index.html must always be revalidated
+    // so a new deploy is picked up immediately.
+    app.useStaticAssets(webDist, {
+      index: false,
+      setHeaders: (res, filePath) => {
+        res.setHeader(
+          'Cache-Control',
+          filePath.includes('assets')
+            ? 'public, max-age=31536000, immutable'
+            : 'no-cache',
+        );
+      },
+    });
+    // SPA fallback: any GET that is not an API call or a static file (no
+    // extension) gets the app shell, so deep links like /savings/3 work.
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      const looksLikeFile = /\.[a-z0-9]+$/i.test(req.path);
+      const isRoute = req.method === 'GET' && !req.path.startsWith('/api') && !looksLikeFile;
+      if (!isRoute) return next();
+      res.setHeader('Cache-Control', 'no-cache');
+      res.sendFile(join(webDist, 'index.html'));
+    });
+  }
+
   app.enableShutdownHooks();
   await app.listen(port);
-  Logger.log(`Veridian mock API listening on http://localhost:${port}`, 'Bootstrap');
+  Logger.log(
+    serveWeb
+      ? `Veridian app + API listening on http://localhost:${port} (API under /api)`
+      : `Veridian mock API listening on http://localhost:${port}`,
+    'Bootstrap',
+  );
 }
 
 void bootstrap();

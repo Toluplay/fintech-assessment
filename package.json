@@ -15,7 +15,8 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e --workspace web",
     "lint": "npm run lint --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "start:prod": "cross-env NODE_ENV=production SERVE_WEB=true node api/dist/main"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

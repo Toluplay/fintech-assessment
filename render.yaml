@@ -1,0 +1,28 @@
+# Render Blueprint: one free web service hosting the API and the built SPA.
+# Dashboard -> New -> Blueprint -> pick this repo -> Apply.
+services:
+  - type: web
+    name: veridian-fintech
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVE_WEB
+        value: "true"
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_TTL
+        value: 15m
+      - key: JWT_REFRESH_TTL
+        value: 7d
+      - key: LOGIN_RATE_LIMIT
+        value: "10"
+      # Same-origin deployment: no cross-origin callers need to be allowed.
+      - key: CORS_ORIGINS
+        value: ""

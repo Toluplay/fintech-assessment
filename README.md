@@ -26,8 +26,9 @@ More screenshots (loading, error, validation, modal, every breakpoint) are in [`
 6. [Performance](#6-performance)
 7. [Testing](#7-testing)
 8. [Production improvements](#8-production-improvements)
-9. [API reference](#9-api-reference)
-10. [Deliverables checklist](#10-deliverables-checklist)
+9. [Deployment](#9-deployment)
+10. [API reference](#10-api-reference)
+11. [Deliverables checklist](#11-deliverables-checklist)
 
 ---
 
@@ -87,6 +88,7 @@ Other commands (run from the repo root):
 | `npm run screenshots --workspace web` | Regenerates `docs/screenshots` at 1440 / 768 / 360 px |
 | `npm run perf --workspace web` | Lighthouse audit of public + authenticated pages → `docs/lighthouse` |
 | `npm run lint` / `npm run typecheck` | ESLint (TS, hooks, jsx-a11y) and `tsc` for both packages |
+| `npm run start:prod` | Serves the production build of both packages from one process (see [§9](#9-deployment)) |
 
 Environment variables are documented in [`api/.env.example`](api/.env.example) and [`web/.env.example`](web/.env.example); every value has a safe development default, so no `.env` file is required.
 
@@ -353,14 +355,56 @@ With another two weeks I would:
 2. **Auth hardening** — MFA/OTP on login and on money-moving actions, device/session management page ("sign out everywhere"), anomaly-based lockouts, `Secure` cookie path scoping, strict CSP with nonces, Subresource Integrity, dependency and secret scanning in CI.
 3. **Complete the flows** — registration and password reset, "Start Saving" with amount/frequency and funding, loan application form with document upload and status tracking, real dashboard balances.
 4. **Observability** — Sentry (with PII scrubbing) for the SPA and API, web-vitals reporting from real users, structured API logs with request ids, uptime checks.
-5. **CI/CD** — GitHub Actions running lint, typecheck, unit, API, E2E and Lighthouse budgets (`lighthouse-ci` assertions) on every PR; preview deployments; Docker images for both packages; deployment behind one reverse proxy (`/api` → NestJS) so the same-site cookie model holds in production.
+5. **CI/CD** — GitHub Actions running lint, typecheck, unit, API, E2E and Lighthouse budgets (`lighthouse-ci` assertions) on every PR; preview deployments per branch on top of the existing Docker/Render setup.
 6. **Accessibility pass** — screen-reader testing (NVDA/VoiceOver), automated axe checks in Playwright, reduced-motion review, a formal WCAG 2.2 AA audit.
 7. **Product polish** — dark mode via the existing token layer, i18n/l10n (currency and number formats already go through `Intl`), offline/poor-network states with a persisted query cache, prefetching route chunks on link hover.
 8. **Testing depth** — visual regression (Playwright snapshots), contract tests between web and API, mutation testing for the validation/error-mapping utilities.
 
 ---
 
-## 9. API reference
+## 9. Deployment
+
+The repo ships as **one container** that serves both the API and the built frontend from a single origin, so the secure-cookie login works exactly as it does locally (`/api/*` → NestJS, everything else → the SPA).
+
+### Render (free tier, ~2 minutes)
+
+1. Push this repository to GitHub.
+2. In Render: **New → Blueprint**, pick the repo, click **Apply**. [`render.yaml`](render.yaml) provisions the service, generates the JWT secrets and sets the health check (`/api/health`).
+3. Open the URL Render gives you (e.g. `https://veridian-fintech.onrender.com`) and sign in with the demo credentials.
+
+Railway, Fly.io and any Docker host work the same way — point them at the [`Dockerfile`](Dockerfile) and set `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET`.
+
+### Run the production build locally
+
+```bash
+npm run build
+SERVE_WEB=true NODE_ENV=production JWT_ACCESS_SECRET=change-me JWT_REFRESH_SECRET=change-me node api/dist/main
+```
+
+or with Docker:
+
+```bash
+docker build -t veridian .
+docker run -p 3000:3000 -e JWT_ACCESS_SECRET=change-me -e JWT_REFRESH_SECRET=change-me veridian
+```
+
+Then open http://localhost:3000. In this mode the API is mounted under `/api`, hashed assets are served with immutable caching, `index.html` is always revalidated, and every non-API route falls back to the SPA so deep links such as `/savings/3` work.
+
+### Environment variables (production)
+
+| Variable | Purpose |
+| --- | --- |
+| `NODE_ENV=production` | Secure cookies, disables the dev-only latency / simulated-error helpers |
+| `SERVE_WEB=true` | Serve `web/dist` from the API process (single-origin deployment) |
+| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` | Token signing secrets — generate long random values |
+| `JWT_ACCESS_TTL`, `JWT_REFRESH_TTL` | Defaults `15m` / `7d` |
+| `LOGIN_RATE_LIMIT` | Login attempts per minute per IP (default 5) |
+| `CORS_ORIGINS` | Only needed if the SPA is hosted on a different origin |
+| `PORT` | Injected by the host; the app listens on it |
+
+---
+
+## 10. API reference
 
 All endpoints except `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout` and `GET /health` require `Authorization: Bearer <accessToken>`.
 
@@ -382,7 +426,7 @@ Errors always use one envelope: `{ statusCode, error, message, details?: string[
 
 ---
 
-## 10. Deliverables checklist
+## 11. Deliverables checklist
 
 | Deliverable | Where |
 | --- | --- |
@@ -392,4 +436,4 @@ Errors always use one envelope: `{ statusCode, error, message, details?: string[
 | README | this file |
 | Screenshots | [`docs/screenshots`](docs/screenshots) (desktop 1440, tablet 768, mobile 360; loading, error, validation, modal states) |
 | Performance report | [§6](#6-performance) + [`docs/lighthouse`](docs/lighthouse) |
-| Deployed URL | optional — not deployed; both packages are deployment-ready (see [§8](#8-production-improvements), item 5) |
+| Deployed URL | optional — one-click deploy via [`render.yaml`](render.yaml) / [`Dockerfile`](Dockerfile), see [§9](#9-deployment) |
