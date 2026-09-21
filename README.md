@@ -4,6 +4,8 @@ A responsive, customer-facing web app for a digital financial institution. Custo
 
 Built with **React 19 + TypeScript + Vite** (frontend) and **NestJS 11** (mock API) as an npm-workspaces monorepo.
 
+**Live demo:** https://veridian-fintech.onrender.com — sign in with `john@example.com` / `Password123!` (or click **Use demo account**). Hosted on Render's free tier, so the first visit after a quiet period takes ~30–50 s to wake up.
+
 | Login (desktop) | Savings (desktop) |
 | --- | --- |
 | ![Login](docs/screenshots/desktop-login.png) | ![Savings](docs/screenshots/desktop-savings.png) |
@@ -372,7 +374,7 @@ The repo ships as **one container** that serves both the API and the built front
 
 1. Push this repository to GitHub.
 2. In Render: **New → Blueprint**, pick the repo, click **Apply**. [`render.yaml`](render.yaml) provisions the service, generates the JWT secrets and sets the health check (`/api/health`).
-3. Open the URL Render gives you (e.g. `https://veridian-fintech.onrender.com`) and sign in with the demo credentials.
+3. Open the URL Render gives you (this repo is deployed at https://veridian-fintech.onrender.com) and sign in with the demo credentials.
 
 Railway, Fly.io and any Docker host work the same way — point them at the [`Dockerfile`](Dockerfile) and set `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET`.
 
@@ -438,4 +440,4 @@ Errors always use one envelope: `{ statusCode, error, message, details?: string[
 | README | this file |
 | Screenshots | [`docs/screenshots`](docs/screenshots) (desktop 1440, tablet 768, mobile 360; loading, error, validation, modal states) |
 | Performance report | [§6](#6-performance) + [`docs/lighthouse`](docs/lighthouse) |
-| Deployed URL | optional — one-click deploy via [`render.yaml`](render.yaml) / [`Dockerfile`](Dockerfile), see [§9](#9-deployment) |
+| Deployed URL | **https://veridian-fintech.onrender.com** (Render free tier, deployed from [`render.yaml`](render.yaml) / [`Dockerfile`](Dockerfile), see [§9](#9-deployment)) |
