@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { resolve } from 'node:path';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -12,7 +13,8 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    // Loads api/.env regardless of the working directory (root scripts run from ../).
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: [resolve(__dirname, '../.env'), '.env'] }),
     // Global rate limit: 100 requests / minute per IP. Login has a stricter limit.
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),
     AuthModule,

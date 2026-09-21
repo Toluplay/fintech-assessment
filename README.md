@@ -398,7 +398,7 @@ Then open http://localhost:3000. In this mode the API is mounted under `/api`, h
 | --- | --- |
 | `NODE_ENV=production` | Secure cookies, disables the dev-only latency / simulated-error helpers |
 | `SERVE_WEB=true` | Serve `web/dist` from the API process (single-origin deployment) |
-| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` | Token signing secrets — generate long random values |
+| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` | Token signing secrets — **required**; the API refuses to start in production without them (or with the `change-me` placeholders) |
 | `JWT_ACCESS_TTL`, `JWT_REFRESH_TTL` | Defaults `15m` / `7d` |
 | `LOGIN_RATE_LIMIT` | Login attempts per minute per IP (default 5) |
 | `CORS_ORIGINS` | Only needed if the SPA is hosted on a different origin |

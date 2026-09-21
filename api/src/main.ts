@@ -9,7 +9,25 @@ import { join, resolve } from 'node:path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
+const DEV_SECRET_PATTERN = /change-me/;
+
+/** Refuse to boot in production with missing or placeholder JWT secrets. */
+function assertProductionSecrets(): void {
+  if (process.env.NODE_ENV !== 'production') return;
+  const missing = ['JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET'].filter(
+    (key) => !process.env[key] || DEV_SECRET_PATTERN.test(process.env[key] ?? ''),
+  );
+  if (missing.length > 0) {
+    Logger.error(
+      `Refusing to start in production: set ${missing.join(' and ')} to long random values.`,
+      'Bootstrap',
+    );
+    process.exit(1);
+  }
+}
+
 async function bootstrap() {
+  assertProductionSecrets();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     // Never log request bodies: they may contain passwords or other credentials.
     logger: ['error', 'warn', 'log'],

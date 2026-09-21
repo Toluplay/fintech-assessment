@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { Link, type LinkProps } from 'react-router-dom';
 import styles from './Button.module.css';
 
@@ -25,23 +25,27 @@ function classes({ variant = 'primary', size = 'md', fullWidth }: BaseProps, ext
     .join(' ');
 }
 
-export function Button({
-  variant,
-  size,
-  fullWidth,
-  leadingIcon,
-  trailingIcon,
-  loading = false,
-  loadingText,
-  disabled,
-  children,
-  className,
-  type = 'button',
-  ...rest
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    variant,
+    size,
+    fullWidth,
+    leadingIcon,
+    trailingIcon,
+    loading = false,
+    loadingText,
+    disabled,
+    children,
+    className,
+    type = 'button',
+    ...rest
+  },
+  ref,
+) {
   const isDisabled = disabled || loading;
   return (
     <button
+      ref={ref}
       type={type}
       className={classes({ variant, size, fullWidth }, className)}
       disabled={isDisabled}
@@ -54,7 +58,7 @@ export function Button({
       {!loading && trailingIcon}
     </button>
   );
-}
+});
 
 interface ButtonLinkProps extends BaseProps, LinkProps {}
 

@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { flushSync } from 'react-dom';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
@@ -17,6 +17,8 @@ import styles from './LoginForm.module.css';
 
 interface LoginFormProps {
   onSubmit: (credentials: LoginRequest) => Promise<unknown>;
+  /** When this changes (new object), the fields are filled with it - used by "Use demo account". */
+  prefill?: LoginFormValues | null;
 }
 
 const INITIAL_VALUES: LoginFormValues = { identifier: '', password: '' };
@@ -26,7 +28,7 @@ const INITIAL_VALUES: LoginFormValues = { identifier: '', password: '' };
  * submit. The API error (wrong password, rate limit, offline...) is shown in a
  * live region above the fields, never as a raw transport error.
  */
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({ onSubmit, prefill = null }: LoginFormProps) {
   const [values, setValues] = useState<LoginFormValues>(INITIAL_VALUES);
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof LoginFormValues, boolean>>>({});
@@ -35,6 +37,17 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   const formErrorId = useId();
   const identifierRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const submitRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!prefill) return;
+    setValues(prefill);
+    setErrors({});
+    setTouched({});
+    setFormError(null);
+    // Focus the submit button so a single Enter/click completes the login.
+    submitRef.current?.focus();
+  }, [prefill]);
 
   const update = (field: keyof LoginFormValues) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -124,7 +137,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         required
       />
 
-      <Button type="submit" size="lg" fullWidth loading={submitting} loadingText="Signing in…">
+      <Button
+        ref={submitRef}
+        type="submit"
+        size="lg"
+        fullWidth
+        loading={submitting}
+        loadingText="Signing in…"
+      >
         Log in
       </Button>
     </form>

@@ -24,6 +24,16 @@ test.describe('authentication', () => {
     await expect(page).toHaveURL(/\/login$/);
   });
 
+  test('"Use demo account" fills the form and signs in with one click', async ({ page }) => {
+    await page.goto('/login');
+    await page.getByRole('button', { name: 'Use demo account' }).click();
+    await expect(page.getByLabel('Email or phone number')).toHaveValue(DEMO_USER.identifier);
+    await expect(page.getByLabel('Password', { exact: true })).toHaveValue(DEMO_USER.password);
+    await expect(page.getByRole('button', { name: 'Log in' })).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('heading', { name: 'John' })).toBeVisible();
+  });
+
   test('client-side validation blocks an empty submit', async ({ page }) => {
     await page.goto('/login');
     await page.getByRole('button', { name: 'Log in' }).click();
