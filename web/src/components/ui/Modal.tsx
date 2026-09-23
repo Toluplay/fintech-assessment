@@ -11,10 +11,7 @@ interface ModalProps {
   footer?: ReactNode;
 }
 
-/**
- * Built on the native <dialog> element: the browser handles focus trapping,
- * Escape-to-close, the top layer and `inert` background for free.
- */
+
 export function Modal({ open, title, description, onClose, children, footer }: ModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -26,9 +23,7 @@ export function Modal({ open, title, description, onClose, children, footer }: M
   }, [open]);
 
   return (
-    // <dialog> is interactive and handles Escape natively; the click handler
-    // only adds "click the backdrop to dismiss", so no key handler is needed.
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+    
     <dialog
       ref={ref}
       className={styles.dialog}
@@ -36,7 +31,7 @@ export function Modal({ open, title, description, onClose, children, footer }: M
       aria-describedby={description ? 'modal-description' : undefined}
       onClose={onClose}
       onClick={(event) => {
-        // Clicks on the backdrop (outside the panel) close the dialog.
+        
         if (event.target === event.currentTarget) onClose();
       }}
     >
